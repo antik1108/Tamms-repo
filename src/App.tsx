@@ -63,14 +63,14 @@ const App: React.FC = () => {
             initial={{ opacity: 0, x: 100, y: -100, scale: 0.9 }}
             whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="flex flex-col items-center gap-12 px-6"
+            className="flex flex-col items-center gap-8 md:gap-12 px-6"
           >
             <div className="relative group">
               {/* Removed red glow effect */}
               <img
                 src={MAIN_IMAGE}
                 alt="Tamanna"
-                className="relative w-72 md:w-[28rem] h-auto rounded-2xl grayscale brightness-90 shadow-2xl transition-all duration-700 group-hover:grayscale-0 group-hover:scale-[1.02]"
+                className="relative w-64 md:w-[28rem] h-auto rounded-2xl grayscale brightness-90 shadow-2xl transition-all duration-700 group-hover:grayscale-0 group-hover:scale-[1.02]"
               />
             </div>
             <div className="space-y-4 text-center">
@@ -82,7 +82,7 @@ const App: React.FC = () => {
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="mt-12 flex flex-col items-center gap-2 text-slate-500"
+              className="mt-8 md:mt-12 flex flex-col items-center gap-2 text-slate-500"
             >
               <span className="text-xs uppercase tracking-[0.3em]">Scroll Down</span>
               <ChevronDown className="w-5 h-5" />
@@ -179,7 +179,7 @@ const App: React.FC = () => {
 
         {/* Page 4 - Left Image */}
         <StorySection id="p4" center className="bg-gradient-to-b from-transparent via-stone-900/10 to-transparent">
-          <div className="flex flex-col md:flex-row items-center gap-12 max-w-6xl px-4 md:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-12 max-w-6xl px-0 md:px-8">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -189,10 +189,10 @@ const App: React.FC = () => {
               <img
                 src={FOURTH_IMAGE}
                 alt="Fourth Memory"
-                className="w-full md:w-[30rem] h-auto rounded-lg grayscale hover:grayscale-0 transition-all duration-500 shadow-lg"
+                className="w-full md:w-[30rem] h-auto rounded-none md:rounded-lg grayscale hover:grayscale-0 transition-all duration-500 shadow-lg"
               />
             </motion.div>
-            <div className="w-full md:w-1/2 text-center md:text-left space-y-10">
+            <div className="w-full md:w-1/2 text-center md:text-left space-y-10 px-6 md:px-0">
               <p className="text-lg uppercase tracking-[0.4em] text-white/50 font-serif">Distance</p>
               <p className="text-2xl md:text-3xl font-serif text-white leading-relaxed italic">
                 "Being far from you has taught me something strange —<br />
@@ -207,7 +207,7 @@ const App: React.FC = () => {
 
         {/* Page 5 - Right Image */}
         <StorySection id="p5" center>
-          <div className="flex flex-col md:flex-row-reverse items-center gap-12 max-w-6xl px-4 md:px-8">
+          <div className="flex flex-col md:flex-row-reverse items-center gap-12 max-w-6xl px-0 md:px-8">
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -217,10 +217,10 @@ const App: React.FC = () => {
               <img
                 src={FIFTH_IMAGE}
                 alt="Fifth Memory"
-                className="w-full md:w-[30rem] h-auto rounded-lg grayscale hover:grayscale-0 transition-all duration-500 shadow-lg"
+                className="w-full md:w-[30rem] h-auto rounded-none md:rounded-lg grayscale hover:grayscale-0 transition-all duration-500 shadow-lg"
               />
             </motion.div>
-            <div className="w-full md:w-1/2 text-center md:text-left space-y-8">
+            <div className="w-full md:w-1/2 text-center md:text-left space-y-8 px-6 md:px-0">
               <p className="text-xl md:text-2xl font-serif text-stone-300">
                 Even when miles stand between us,<br />
                 my heart somehow always knows where yours is.

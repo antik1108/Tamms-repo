@@ -63,34 +63,37 @@ const App: React.FC = () => {
 
     // 3. User interaction to unmute and ensure playback
     const handleUserInteraction = () => {
-      if (audioElement) {
-        audioElement.muted = false;
-        audioElement.volume = 1.0;
+      if (!audioElement) return;
 
-        // Ensure it's playing if it wasn't already
-        if (audioElement.paused) {
-          audioElement.play().catch((e) => console.log("Play failed:", e));
-        }
+      audioElement.muted = false;
+      audioElement.volume = 1.0;
+
+      const playPromise = audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Only remove listeners if playback actually started successfully
+            document.removeEventListener('click', handleUserInteraction);
+            document.removeEventListener('touchstart', handleUserInteraction);
+            document.removeEventListener('keydown', handleUserInteraction);
+          })
+          .catch((error) => {
+            console.log("Interaction play failed:", error);
+            // Do NOT remove listeners here, so the next click can try again
+          });
       }
-
-      // Remove listeners once interaction happens
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
     };
 
-    // Add listeners for any user interaction
+    // Add listeners for valid user interactions (Click/Touch/Key)
+    // NOTE: 'scroll' is NOT a valid interaction for unlocking audio, so it is removed.
     document.addEventListener('click', handleUserInteraction);
     document.addEventListener('touchstart', handleUserInteraction);
     document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('scroll', handleUserInteraction); // Added scroll as interaction
 
     return () => {
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('touchstart', handleUserInteraction);
       document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
     };
   }, []);
 

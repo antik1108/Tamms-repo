@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { Heart, Stars as StarsIcon, ChevronDown, Sparkles } from 'lucide-react';
 import StarBackground from './components/StarBackground';
@@ -16,8 +16,10 @@ const FOURTH_IMAGE = "/fourth.png";
 const FIFTH_IMAGE = "/fifth.png";
 const SIXTH_IMAGE = "/sixth.png";
 const SEVENTH_IMAGE = "/seventh.png";
+const BACKGROUND_TRACK = "/musics/tum-tak-raanjhanaa-128-kbps_CXTKuUC4.mp3";
 
 const App: React.FC = () => {
+  const backgroundAudioRef = useRef<HTMLAudioElement | null>(null);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -43,8 +45,67 @@ const App: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const audioElement = backgroundAudioRef.current;
+    if (!audioElement) return;
+
+    // 1. Always reset to start on refresh/mount
+    audioElement.currentTime = 0;
+    audioElement.muted = true; // Start muted to satisfy autoplay policies
+
+    // 2. Try to play immediately (muted)
+    const playPromise = audioElement.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.log("Autoplay prevented:", error);
+      });
+    }
+
+    // 3. User interaction to unmute and ensure playback
+    const handleUserInteraction = () => {
+      if (audioElement) {
+        audioElement.muted = false;
+        audioElement.volume = 1.0;
+
+        // Ensure it's playing if it wasn't already
+        if (audioElement.paused) {
+          audioElement.play().catch((e) => console.log("Play failed:", e));
+        }
+      }
+
+      // Remove listeners once interaction happens
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('scroll', handleUserInteraction);
+    };
+
+    // Add listeners for any user interaction
+    document.addEventListener('click', handleUserInteraction);
+    document.addEventListener('touchstart', handleUserInteraction);
+    document.addEventListener('keydown', handleUserInteraction);
+    document.addEventListener('scroll', handleUserInteraction); // Added scroll as interaction
+
+    return () => {
+      document.removeEventListener('click', handleUserInteraction);
+      document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('keydown', handleUserInteraction);
+      document.removeEventListener('scroll', handleUserInteraction);
+    };
+  }, []);
+
   return (
     <div className="relative bg-black text-white selection:bg-stone-500/30 font-serif overflow-x-hidden">
+      <audio
+        ref={backgroundAudioRef}
+        src={BACKGROUND_TRACK}
+        autoPlay
+        muted
+        loop
+        preload="auto"
+        style={{ display: 'none' }}
+      />
+
       {/* Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-white origin-left z-50"
